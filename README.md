@@ -24,7 +24,7 @@
 17. Clean openstack state
     
     ```
-    . admin
+    . keystonerc_admin
     nova list
     nova delete <instance-name>
     neutron router-list
