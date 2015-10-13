@@ -1,0 +1,21 @@
+--- /opt/bvc/ux/client/bvc-core-ux.js.orig	2015-10-01 02:39:51.004122575 +0000
++++ /opt/bvc/ux/client/bvc-core-ux.js	2015-10-01 02:56:25.383988995 +0000
+@@ -19169,8 +19169,9 @@
+ 	    controller: currentController,
+ 	    controllerVersion: currentController["version"],
+ 	    controllerHost: currentController["host"],
+-	    controllerRestUrl: currentController['protocol'] + '://' + currentController['host'] + ':' + currentController['restPort'],
+-	    inventoryNotificationRateLimitInSecs: currentConfig['inventoryNotificationRateLimitInSecs'],
++	    //controllerRestUrl: currentController['protocol'] + '://' + currentController['host'] + ':' + currentController['restPort'],
++	    controllerRestUrl: window.location.protocol + "//" + window.location.hostname + ":" + currentController['restPort'],
++            inventoryNotificationRateLimitInSecs: currentConfig['inventoryNotificationRateLimitInSecs'],
+ 
+ 	    getProperty: function getProperty(propertyKey) {
+ 	      return currentConfig[propertyKey];
+@@ -35902,4 +35903,4 @@
+ 	module.exports = Profile;
+ 
+ /***/ }
+-/******/ ]);
+\ No newline at end of file
++/******/ ]);
