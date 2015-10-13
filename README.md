@@ -164,3 +164,37 @@ If BSC UI topology manager isn't working ODL topology can be checked here:
 
 39. Check output of ovs-vsctl on compute and neutron nodes to see correct config.  It should look similar to this:
 
+```
+[root@compute1 ~]# ovs-vsctl show
+44ca1d09-dd9c-4b2b-b51e-0629a5924c86
+    Manager "tcp:192.168.0.10:6640"
+        is_connected: true
+    Bridge br-int
+        Controller "tcp:192.168.0.10:6653"
+            is_connected: true
+        fail_mode: secure
+        Port br-int
+            Interface br-int
+                type: internal
+        Port "vxlan-192.168.0.11"
+            Interface "vxlan-192.168.0.11"
+                type: vxlan
+                options: {key=flow, local_ip="192.168.0.12", remote_ip="192.168.0.11"}
+        Port "vxlan-192.168.0.13"
+            Interface "vxlan-192.168.0.13"
+                type: vxlan
+                options: {key=flow, local_ip="192.168.0.12", remote_ip="192.168.0.13"}
+        Port "tape0a7a301-8b"
+            Interface "tape0a7a301-8b"
+    Bridge br-ex
+        Port br-ex
+            Interface br-ex
+                type: internal
+    Bridge "br-eth1"
+        Port "br-eth1"
+            Interface "br-eth1"
+                type: internal
+        Port "eth1"
+            Interface "eth1"
+    ovs_version: "2.3.1"
+```
