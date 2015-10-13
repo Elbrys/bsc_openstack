@@ -162,7 +162,7 @@ If BSC UI topology manager isn't working ODL topology can be checked here:
     
     http://<dns or ip of server>:8181/controller/nb/v2/neutron/networks
 
-39. Check output of ovs-vsctl on compute and neutron nodes to see correct config.  It should look similar to this:
+39. Check output of ovs-vsctl on compute and neutron nodes to see correct config.  It should look similar to this (note the vxlan tunnels under the br-int port):
 
 ```
 [root@compute1 ~]# ovs-vsctl show
