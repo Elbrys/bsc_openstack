@@ -1,6 +1,6 @@
 # Instructions for how to configure Openstack to use Brocade SDN Controller (or OpenDaylight)
-1. Create Ravello account
-2. Copy Openstack Kilo blueprint from repo
+1. Create Ravello account - https://www.ravellosystems.com/
+2. Copy Openstack Kilo blueprint from repo - https://www.ravellosystems.com/repo/blueprints/60360952
 3. Create application
 4. Add key to application
 5. Add bscui port to application - port 9001
@@ -10,7 +10,7 @@
 10. Create openstack instance to confirm that openstack is working
 11. Fix novnc console access using dns name by editing /etc/nova/nova.conf on each compute node and restart nova-compute: systemctl restart openstack-nova-compute
 12. Delete openstack instance
-13. Install BSC on control node.  Find detailed installation video here: https://www.youtube.com/watch?v=5jxEhQXa2NM
+13. Install BSC on control node.  Find detailed installation video here: https://www.youtube.com/watch?v=5jxEhQXa2NM (if the installation fails this video might provide a helpful workaround: https://www.youtube.com/watch?v=n1PnXcjJHJ4)
 14. Confirm UI access to BSC on control node on port 9001 but will be unable to login
 15. Fix login issue by patching BSC - get patch using
    
