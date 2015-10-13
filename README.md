@@ -10,7 +10,7 @@
 10. Create openstack instance to confirm that openstack is working
 11. Fix novnc console access using dns name by editing /etc/nova/nova.conf on each compute node and restart nova-compute: systemctl restart openstack-nova-compute
 12. Delete openstack instance
-13. Install BSC on control node
+13. Install BSC on control node.  Find detailed installation video here: https://www.youtube.com/watch?v=5jxEhQXa2NM
 14. Confirm UI access to BSC on control node on port 9001 but will be unable to login
 15. Fix login issue by patching BSC - get patch using
    
