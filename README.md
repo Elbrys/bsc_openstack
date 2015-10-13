@@ -3,8 +3,9 @@
 2. Copy Openstack Kilo blueprint from repo - https://www.ravellosystems.com/repo/blueprints/60360952
 3. Create application
 4. Add key to application
-5. Add bscui port to application - port 9001
-6. Add bscrest port to application - port 8181
+5. Add bscui port to application - http port 9001
+6. Add bscrest port to application - http port 8181
+7. Add novnc port to application - https port 6080
 7. Publish application - chooose AWS
 9. Confirm openstack works by logging into the openstack UI - use dns name and port 443 i.e. https to login to openstack UI
 10. Create openstack instance to confirm that openstack is working
@@ -17,7 +18,7 @@
    ``` 
    curl https://raw.githubusercontent.com/Elbrys/bsc_openstack/master/bvc2.patch > bvc2.patch 
    sudo yum install -y patch
-   pushd / && patch -p0 < bvc2.patch && popd
+   pushd / && patch -p0 < ~/bvc2.patch && popd
    ```
 
 16. Confirm login to BSC now works
@@ -92,7 +93,7 @@
     sed -i -e 's/SELINUX=enforcing/SELINUX=permissive/g' /etc/selinux/config
     ```
 
-25. Check ovs-vsctl and look for connected status
+25. Check ovs-vsctl and look for connected status - if still not connected then reboot as recommended in next step
 26. Reboot compute and neutron nodes.
 27. Check BSC UI topology manager to make sure that all 3 switches are showing up there.
 If BSC UI topology manager isn't working ODL topology can be checked here:
