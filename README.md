@@ -14,11 +14,11 @@
 13. Install BSC on control node
 14. Confirm UI access to BSC on control node on port 9001 but will be unable to login
 15. Fix login issue by patching BSC - get patch using
-``` 
-curl https://raw.githubusercontent.com/Elbrys/bsc_openstack/master/bvc2.patch > bvc2.patch 
-sudo yum install -y patch
-pushd / && patch -p0 < bvc2.patch && popd
-```
+   ``` 
+   curl https://raw.githubusercontent.com/Elbrys/bsc_openstack/master/bvc2.patch > bvc2.patch 
+   sudo yum install -y patch
+   pushd / && patch -p0 < bvc2.patch && popd
+   ```
 16. Confirm login to BSC now works
 17. Clean openstack state
 ```
