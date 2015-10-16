@@ -1,4 +1,5 @@
 # Instructions for how to configure Openstack to use Brocade SDN Controller (or OpenDaylight)
+# See the video of the complete install on youtube: https://www.youtube.com/watch?v=tXw4W3RQDMM
 1. Create Ravello account - https://www.ravellosystems.com/
 2. Copy Openstack Kilo blueprint from repo - https://www.ravellosystems.com/repo/blueprints/60360952
 3. Create application
