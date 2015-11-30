@@ -38,8 +38,8 @@ the application is published so make sure you don't forget to set it before publ
         * http port 8181 for the Brocade SDN Controller REST API
         * https port 6080 for the OpenStack NOVNC console
 
-![screenshot 3]
-(img/screen_shot_3.png]
+  ![screenshot 3]
+  (img/screen_shot_3.png)
 
 * After you have configured your application you can publish it which automatically starts it too.  I recommend publishing 
 it to AWS as I found that the performance of the google nodes was unpredictable and that could cause problems with the BSC install.
@@ -51,14 +51,13 @@ have started in the Ravello UI you can see the DNS name that was assigned to eac
   ![screenshot 4]
   (img/screen_shot_4.png)
   
-  
   Since this is port 443 and https you will most likely get a certificate error because of the self signed certificate in use by this
   install of OpenStack.  You will need to override this error depending on the browser you are using.  Once you have overriden this
   error you can login to the OpenStack UI. The credentials are "admin" and the password is "ravellosystems".  Once you have logged in to
   OpenStack you can play around with creating VMs etc.  You will notice, however, that the console does not work for the VMs.  In order
-  to get the console working you will need to go in and make some changes to the OpenStack configuration to accomodate this Ravello setup.
+  to get the console working you will need to go in and make some changes to the OpenStack configuration to accomodate this Ravello setup as follows:
  
-  * You will need to use the DNS name of the controller node to ssh into the OpenStack controller.  To ssh into the controller you will 
+  You will need to use the DNS name of the controller node to ssh into the OpenStack controller.  To ssh into the controller you will 
   need to configure your ssh client to use the private key that you installed above before publishing your application.  Your ssh command
   might look something like this: "ssh -i ~/.ssh/id_rsa centos@controller-bscwithopenstackki-o1wdnkwc.srv.ravcloud.com" Note: ssh  on the nodes is 
   specifically configured to disallow username / password login.  The only way you can login is using your private key.  You ssh into the
@@ -91,122 +90,124 @@ it you will need to ssh into the control node and type the following:
     ```
 Now you should be able to login to the Brocade UI.
 
+![screenshot 5]
+(img/screen_shot_5.png)
+
 * Now you are ready to make the configuration changes to OpenStack to make it work with the Brocade SDN Controller.  First you will
 need to clear its existing state i.e. delete all vms, networks, etc that have been created under neutron.  You can do this either through
 the UI or through the cli.  Note, to use the cli you will need to ssh into the controller and "sudo su - root" to switch to the root user.  Also
 you will need to setup the admin credentials.  To do this execute the keystonerc_admin script in the root home directory as follows: ". keystonrc_admin".
 Then use the following commands to list and delete all the elements:
 
-```
-nova list
-nova delete <instance-name>
-neutron router-list
-neutron router-port-list <router>
-neutron router-interface-delete <router> <subnet>
-neutron floatingip-list
-neutron floatingip-delete
-neutron port-list
-neutron port-delete <port>
-neutron router-delete <router>
-neutron subnet-list
-neutron subnet-delete <subnet>
-neutron net-list
-neutron net-delete <network>
-```
+  ```
+  nova list
+  nova delete <instance-name>
+  neutron router-list
+  neutron router-port-list <router>
+  neutron router-interface-delete <router> <subnet>
+  neutron floatingip-list
+  neutron floatingip-delete
+  neutron port-list
+  neutron port-delete <port>
+  neutron router-delete <router>
+  neutron subnet-list
+  neutron subnet-delete <subnet>
+  neutron net-list
+  neutron net-delete <network>
+  ```
 * When you have cleaned up the neutron OpenStack state, you will need to stop the neutron server. On the control node as root type: "systemctl stop neutron-server"
 
 * You will then want to create a little script for yourself to setup the openvswitch (ovs) instances correctly on each of the nodes.  I recommend grabbing
 the script from my repository and copying it onto each node:
 
-```
-curl https://raw.githubusercontent.com/Elbrys/bsc_openstack/master/set_ovs.sh > set_ovs.sh
-chmod a+x set_ovs.sh
-scp set_ovs.sh neutron:~/
-scp set_ovs.sh compute1:~/
-scp set_ovs.sh compute2:~/
-```
+  ```
+  curl https://raw.githubusercontent.com/Elbrys/bsc_openstack/master/set_ovs.sh > set_ovs.sh
+  chmod a+x set_ovs.sh
+  scp set_ovs.sh neutron:~/
+  scp set_ovs.sh compute1:~/
+  scp set_ovs.sh compute2:~/
+  ```
 
 * Then you need to go and disable the neutron openvswitch agent on the compute and neutron nodes.  To do that ssh into each node (compute1, compute2, neutron)
 and type the following:
 
-```
-systemctl stop neutron-openvswitch-agent
-systemctl disable neutron-openvswitch-agent
-```
+  ```
+  systemctl stop neutron-openvswitch-agent
+  systemctl disable neutron-openvswitch-agent
+  ```
 
-* Next you need to cleanup up any existing openvswitch configuration.  To do that do the following on the compute and neutron nodes.  Note: At any point you can type 
-"ovs-vsctl show" to see the openvswitch configuration:
+* Next you need to cleanup up any existing openvswitch configuration.  To do that do the following on the compute and neutron nodes.  Note: At any point you can type "ovs-vsctl show" to see the openvswitch configuration:
 
-```
-systemctl stop openvswitch
-rm -rf /var/log/openvswitch/*
-rm -rf /etc/openvswitch/conf.db
-systemctl start openvswitch
-```
+  ```
+  systemctl stop openvswitch
+  rm -rf /var/log/openvswitch/*
+  rm -rf /etc/openvswitch/conf.db
+  systemctl start openvswitch
+  ```
 
 * Use the set_ovs.sh script to configure openvswitch to use the Brocade controller.  Invoke it as follows: "./set_ovs.sh". You will also need to 
 change the selinux configuration to allow the openvswitch instance to communicate with the controller.  Since this is a demo I just disabled selinux as 
 follows (first line disables it now, second line keeps it disabled after restart):
 
-```
-setenforce 0
-sed -i -e 's/SELINUX=enforcing/SELINUX=permissive/g' /etc/selinux/config
-```
+  ```
+  setenforce 0
+  sed -i -e 's/SELINUX=enforcing/SELINUX=permissive/g' /etc/selinux/config
+  ```
+  
+  Note! you will need to make the selinux change to the control node too.
+  After these changes to openvswitch in my experience you will need to reboot the node (compute1, compute2, neutron) in order for ovs and the network stack to start working correctly together.  
 
-After these changes in my experience you will need to reboot the node (compute1, compute2, neutron) in order for ovs and the network stack to start working 
-correctly together.  
+  After the node reboots you should see that ovs-vsctl shows a connection to the Brocade controller something like the following:
 
-After the node reboots you should see that ovs-vsctl shows a connection to the Brocade controller something like the following:
+  ```
+  [root@compute1 ~]# ovs-vsctl show
+  44ca1d09-dd9c-4b2b-b51e-0629a5924c86
+      Manager "tcp:192.168.0.10:6640"
+          is_connected: true
+  ```
 
-```
-[root@compute1 ~]# ovs-vsctl show
-44ca1d09-dd9c-4b2b-b51e-0629a5924c86
-    Manager "tcp:192.168.0.10:6640"
-        is_connected: true
-```
-
-You can also go to the Brocade Controller UI and the topology manager and check to make sure the OVS instances show up there.
+  You can also go to the Brocade Controller UI and the topology manager and check to make sure the OVS instances show up there.
 
 * Once you have configured the nodes (compute1, compute2, and neutron) correctly and they appear in the Brocade UI, you need 
 to configure the neutron server to use the Brocade SDN controller.  On the controller type the following as root:
 
-```
-crudini --set /etc/neutron/plugins/ml2/ml2_conf.ini ml2 mechanism_drivers opendaylight 
-crudini --set /etc/neutron/plugins/ml2/ml2_conf.ini ml2 tenant_network_types vxlan
+  ```
+  crudini --set /etc/neutron/plugins/ml2/ml2_conf.ini ml2 mechanism_drivers opendaylight 
+  crudini --set /etc/neutron/plugins/ml2/ml2_conf.ini ml2 tenant_network_types vxlan
+  
+  cat <<EOT>> /etc/neutron/plugins/ml2/ml2_conf.ini 
+  [ml2_odl]
+  password = admin
+  username = admin
+  url = http://192.168.0.10:8181/controller/nb/v2/neutron
+  EOT
+  
+  mysql -e "drop database if exists neutron_ml2;"
+  mysql -e "create database neutron_ml2 character set utf8;"
+  mysql -e "grant all on neutron_ml2.* to 'neutron'@'%';"
+  neutron-db-manage --config-file /usr/share/neutron/neutron-dist.conf --config-file /etc/neutron/neutron.conf \
+  --config-file /etc/neutron/plugin.ini upgrade head
+  ```
 
-cat <<EOT>> /etc/neutron/plugins/ml2/ml2_conf.ini 
-[ml2_odl]
-password = admin
-username = admin
-url = http://192.168.0.10:8181/controller/nb/v2/neutron
-EOT
+  Now before you start the neutron server you need to fix a couple more things:
 
-mysql -e "drop database if exists neutron_ml2;"
-mysql -e "create database neutron_ml2 character set utf8;"
-mysql -e "grant all on neutron_ml2.* to 'neutron'@'%';"
-neutron-db-manage --config-file /usr/share/neutron/neutron-dist.conf --config-file /etc/neutron/neutron.conf \
---config-file /etc/neutron/plugin.ini upgrade head
-```
+  First edit the /etc/neutron/plugins/ml2/ml2_conf.ini file and add vxlan to the available network types
 
-Now before you start the neutron server you need to fix a couple more things:
-
-First edit the /etc/neutron/plugins/ml2/ml2_conf.ini file and add vxlan to the available network types
-
-Next, you need to install networking-odl.  I'm not sure why the ODL instructions and Brocade instructions don't mention 
+  Next, you need to install networking-odl.  I'm not sure why the ODL instructions and Brocade instructions don't mention 
 this (maybe it is already included in devstack but not pacstack?) but 
 it took me a while to figure out that it was missing so hopefully I can save you some pain debugging this.  To install networking-odl do 
 the following:
 
-```
-yum install -y python-pip
-pip install networking-odl
-```
+  ```
+  yum install -y python-pip
+  pip install networking-odl
+  ```
 
-Now you are ready to start the neutron server and it should start correctly.  To start it type: "systemctl start neutron-server".  If you have 
+* Now you are ready to start the neutron server and it should start correctly.  To start it type: "systemctl start neutron-server".  If you have 
 any issues starting it look in the logfile /var/log/neutron/server.log to find the exact issue. 
  
 That's it.  You should now have a working copy of OpenStack with networking controlled by the Brocade SDN Controller.  Note that the Brocade SDN Controller
 does not install as a service and does not start automatically so if you stop it or reboot the control node you will need to go in and manually start it.  Or
-you can configure it to automatically start at boot.  You could also play around with using docker to run the Brocade Controller.  Take a look at 
-https://github.com/Elbrys/bvc_docker if you are interested in that.  If you have any issues, take a look at the video (https://www.youtube.com/watch?v=tXw4W3RQDMM)
-that has lots of details that may be key to whatever issue you are experiencing.  If you still have questions, feel free to email me: arooney@elbrys.com
+you can configure it to automatically start at boot but I am not going to detail how to do that here.  You could also play around with using docker to run the Brocade Controller and have that automatically start if you want.  Take a look at 
+https://github.com/Elbrys/bvc_docker if you are interested in running the Brocade Controller inside a docker container.  If you have any issues, take a look at the video (https://www.youtube.com/watch?v=tXw4W3RQDMM)
+which is a video of me doing all of this from beginning to end.  If you have any questions this may answer them for you.  If you still have questions, feel free to email me: arooney@elbrys.com
