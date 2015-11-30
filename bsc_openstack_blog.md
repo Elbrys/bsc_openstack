@@ -1,6 +1,6 @@
 # How to integrate the Brocade SDN Controller or Opendaylight with Openstack using Ravello
 
-This blog is based on the video I created (https://www.youtube.com/watch?v=tXw4W3RQDMM) and the corresponding insructions (https://github.com/Elbrys/bsc_openstack).  So feel free to refer to those if you want more details.
+This blog is based on the video I created (https://www.youtube.com/watch?v=tXw4W3RQDMM) and the corresponding instructions (https://github.com/Elbrys/bsc_openstack).  So feel free to refer to those if you want more details.
 
 So why write this blog?  There are some existing instructions out there for integrating OpenDaylight or the Brocade SDN Controller with OpenStack. 
 For example here's a few links that I found useful when putting together this blog:
