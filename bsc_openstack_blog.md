@@ -150,8 +150,9 @@ follows (first line disables it now, second line keeps it disabled after restart
   setenforce 0
   sed -i -e 's/SELINUX=enforcing/SELINUX=permissive/g' /etc/selinux/config
   ```
-
-  After these changes in my experience you will need to reboot the node (compute1, compute2, neutron) in order for ovs and the network stack to start working correctly together.  
+  
+  Note! you will need to make the selinux change to the control node too.
+  After these changes to openvswitch in my experience you will need to reboot the node (compute1, compute2, neutron) in order for ovs and the network stack to start working correctly together.  
 
   After the node reboots you should see that ovs-vsctl shows a connection to the Brocade controller something like the following:
 
