@@ -151,10 +151,9 @@ follows (first line disables it now, second line keeps it disabled after restart
   sed -i -e 's/SELINUX=enforcing/SELINUX=permissive/g' /etc/selinux/config
   ```
 
-After these changes in my experience you will need to reboot the node (compute1, compute2, neutron) in order for ovs and the network stack to start working 
-correctly together.  
+  After these changes in my experience you will need to reboot the node (compute1, compute2, neutron) in order for ovs and the network stack to start working correctly together.  
 
-After the node reboots you should see that ovs-vsctl shows a connection to the Brocade controller something like the following:
+  After the node reboots you should see that ovs-vsctl shows a connection to the Brocade controller something like the following:
 
   ```
   [root@compute1 ~]# ovs-vsctl show
@@ -163,7 +162,7 @@ After the node reboots you should see that ovs-vsctl shows a connection to the B
           is_connected: true
   ```
 
-You can also go to the Brocade Controller UI and the topology manager and check to make sure the OVS instances show up there.
+  You can also go to the Brocade Controller UI and the topology manager and check to make sure the OVS instances show up there.
 
 * Once you have configured the nodes (compute1, compute2, and neutron) correctly and they appear in the Brocade UI, you need 
 to configure the neutron server to use the Brocade SDN controller.  On the controller type the following as root:
@@ -186,11 +185,11 @@ to configure the neutron server to use the Brocade SDN controller.  On the contr
   --config-file /etc/neutron/plugin.ini upgrade head
   ```
 
-Now before you start the neutron server you need to fix a couple more things:
+  Now before you start the neutron server you need to fix a couple more things:
 
-First edit the /etc/neutron/plugins/ml2/ml2_conf.ini file and add vxlan to the available network types
+  First edit the /etc/neutron/plugins/ml2/ml2_conf.ini file and add vxlan to the available network types
 
-Next, you need to install networking-odl.  I'm not sure why the ODL instructions and Brocade instructions don't mention 
+  Next, you need to install networking-odl.  I'm not sure why the ODL instructions and Brocade instructions don't mention 
 this (maybe it is already included in devstack but not pacstack?) but 
 it took me a while to figure out that it was missing so hopefully I can save you some pain debugging this.  To install networking-odl do 
 the following:
@@ -200,7 +199,7 @@ the following:
   pip install networking-odl
   ```
 
-Now you are ready to start the neutron server and it should start correctly.  To start it type: "systemctl start neutron-server".  If you have 
+* Now you are ready to start the neutron server and it should start correctly.  To start it type: "systemctl start neutron-server".  If you have 
 any issues starting it look in the logfile /var/log/neutron/server.log to find the exact issue. 
  
 That's it.  You should now have a working copy of OpenStack with networking controlled by the Brocade SDN Controller.  Note that the Brocade SDN Controller
