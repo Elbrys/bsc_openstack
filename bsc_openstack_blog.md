@@ -90,6 +90,9 @@ it you will need to ssh into the control node and type the following:
     ```
 Now you should be able to login to the Brocade UI.
 
+![screenshot 5]
+(img/screen_shot_5.png)
+
 * Now you are ready to make the configuration changes to OpenStack to make it work with the Brocade SDN Controller.  First you will
 need to clear its existing state i.e. delete all vms, networks, etc that have been created under neutron.  You can do this either through
 the UI or through the cli.  Note, to use the cli you will need to ssh into the controller and "sudo su - root" to switch to the root user.  Also
