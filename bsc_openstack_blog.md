@@ -90,9 +90,6 @@ it you will need to ssh into the control node and type the following:
     ```
 Now you should be able to login to the Brocade UI.
 
-![screenshot 5]
-(img/screen_shot_5.png)
-
 * Now you are ready to make the configuration changes to OpenStack to make it work with the Brocade SDN Controller.  First you will
 need to clear its existing state i.e. delete all vms, networks, etc that have been created under neutron.  You can do this either through
 the UI or through the cli.  Note, to use the cli you will need to ssh into the controller and "sudo su - root" to switch to the root user.  Also
@@ -168,8 +165,11 @@ follows (first line disables it now, second line keeps it disabled after restart
 
   You can also go to the Brocade Controller UI and the topology manager and check to make sure the OVS instances show up there.
 
+![screenshot 5]
+(img/screen_shot_5.png)
+
 * Once you have configured the nodes (compute1, compute2, and neutron) correctly and they appear in the Brocade UI, you need 
-to configure the neutron server to use the Brocade SDN controller.  On the controller type the following as root:
+to configure the neutron server to use the Brocade SDN controller.  On the controller node type the following as root:
 
   ```
   crudini --set /etc/neutron/plugins/ml2/ml2_conf.ini ml2 mechanism_drivers opendaylight 
