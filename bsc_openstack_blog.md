@@ -1,7 +1,9 @@
 # How to integrate the Brocade SDN Controller or Opendaylight with Openstack using Ravello
 
-There are some existing instructions out there for integrating OpenDaylight or the Brocade SDN Controller with OpenStack. 
-Here's a few links that I found useful when putting together this blog:
+This blog is based on the video I created (https://www.youtube.com/watch?v=tXw4W3RQDMM) and the corresponding insructions (https://github.com/Elbrys/bsc_openstack).  So feel free to refer to those if you want more details.
+
+So why write this blog?  There are some existing instructions out there for integrating OpenDaylight or the Brocade SDN Controller with OpenStack. 
+For example here's a few links that I found useful when putting together this blog:
 
 * https://wiki.opendaylight.org/view/OpenStack_and_OpenDaylight
 * https://www.rdoproject.org/networking/helium-opendaylight-juno-openstack/
@@ -16,7 +18,7 @@ However, I didn't want to go through all the work of installing OpenStack on rea
 The best part was that I could use an existing blueprint so not only would I not have to install openstack on a bunch of
 real hardware, but I could also quickly get it bootstrapped from a blueprint in AWS.  In choosing Ravello I had to tweak
 the instructions in the links above so that all the pieces worked in the Ravello environment i.e. basically they needed to
-work behind a NAT firewall.  So here are those instructions:
+work behind a NAT firewall.  And so here are those instructions:
 
 * Create a Ravello account here: https://www.ravellosystems.com/ You get 2 weeks free and after that you have to pay for 
 what you use.
