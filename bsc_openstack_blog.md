@@ -44,10 +44,10 @@ the application is published so make sure you don't forget to set it before publ
   (img/screen_shot_3.png)
 
 * After you have configured your application you can publish it which automatically starts it too.  I recommend publishing 
-it to AWS as I found that the performance of the google nodes was unpredictable and that could cause problems with the BSC install.
+it to AWS as I found that the performance of the Google nodes was unpredictable and that could cause problems with the Brocade SDN Controller (BSC) install.
 Note that publishing and starting the application takes several minutes (for me it took about 8 minutes).  
 * Now you can confirm that OpenStack is working correctly by logging into the OpenStack instance you just started in AWS.  Once the nodes
-have started in the Ravello UI you can see the DNS name that was assigned to each VM in your application in the Canvass tab.
+have started in the Ravello UI you can see the DNS name that was assigned to each VM in your application in the Canvas tab.
  You will want to try logging into the OpenStack UI service using this DNS name which is on port 443 of the Controller VM.
   
   ![screenshot 4]
